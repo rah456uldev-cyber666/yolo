@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Verify mobile{% endblock %}
+{% block main_class %}narrow{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Verify your mobile</h1>
+  <p class="muted">Enter the code we sent to <strong>{{ phone }}</strong>.</p>
+  {% if screen_otp %}
+    <div class="otp-screen">
+      <div class="muted">Offline mode (no SMS sent). Your code is:</div>
+      <div class="otp-code">{{ screen_otp }}</div>
+    </div>
+  {% endif %}
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>One-time code
+      <input name="otp" required inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4,8}" maxlength="8" class="otp">
+    </label>
+    <button type="submit" class="primary">Verify and finish registration</button>
+  </form>
+  <form method="post" action="{{ url_for('auth.resend_otp') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="link" data-wait="{{ wait }}" id="resend">Resend code</button>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='resend.js') }}"></script>{% endblock %}

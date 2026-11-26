@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<h1>About Medibot</h1>
+<p>Medibot is a retrieval-augmented (RAG) chatbot. When you ask a question, it searches
+  <em>The Gale Encyclopedia of Medicine</em> for the most relevant passages and asks an AI model
+  to answer using only those passages. Each answer lists the pages it used.</p>
+
+<h2>Runs offline</h2>
+<ul>
+  <li><strong>AI model:</strong> {{ llm }}</li>
+  <li><strong>Search:</strong> the encyclopedia index and embedding model are stored inside the project folder.</li>
+  <li><strong>Disease library:</strong> {{ stats.count }} diseases and conditions in a local database
+      ({{ stats.sources|join(', ') }}).</li>
+  <li><strong>Accounts and chats:</strong> stored in a local SQLite database. Nothing is sent to the cloud.</li>
+  <li><strong>OTP:</strong> {{ sms }}</li>
+  <li><strong>Offline mode:</strong> {{ 'on' if offline else 'off' }}</li>
+</ul>
+<p>Because nothing leaves the computer, it keeps working without internet (for example in rural clinics or
+  during network outages) and patients' questions stay private.</p>
+
+<h2>Important</h2>
+<p>Medibot is for education only. It is not a doctor, does not diagnose, and the encyclopedia may not reflect the
+  latest medical guidance. Always consult a qualified healthcare professional.</p>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block main_class %}narrow{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>{{ 'Page not found' if code == 404 else 'Something went wrong' }}</h1>
+  <p>{{ message }}</p>
+  <p><a href="{{ url_for('chat.index') }}">Go to the home page</a></p>
+</div>
+{% endblock %}

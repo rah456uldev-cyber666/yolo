@@ -1,0 +1,15 @@
+<div class="message {{ msg.role }}">
+  <div class="role">{{ 'You' if msg.role == 'user' else 'Medibot' }}</div>
+  {% if msg.notice %}<div class="notice">⚠️ {{ msg.notice }}</div>{% endif %}
+  <div class="content">{{ msg.content | nl2br }}</div>
+  {% if msg.diseases %}
+    <div class="related">Disease library:
+      {% for d in msg.diseases %}<a href="{{ url_for('diseases.detail', slug=d.slug) }}">{{ d.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+    </div>
+  {% endif %}
+  {% if msg.sources %}
+    <details class="sources"><summary>Sources ({{ msg.sources|length }})</summary>
+      <ul>{% for s in msg.sources %}<li><strong>{{ s.source }}, page {{ s.page }}</strong>: “{{ s.snippet }}…”</li>{% endfor %}</ul>
+    </details>
+  {% endif %}
+</div>

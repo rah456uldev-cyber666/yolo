@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Disease library{% endblock %}
+{% block content %}
+<h1>Disease library</h1>
+{% if not available %}
+  <div class="flash flash-error">The disease database has not been built yet. Run <code>python scripts/build_disease_db.py</code>.</div>
+{% else %}
+  <p class="muted">{{ stats.count }} diseases and conditions with symptoms, treatments and remedies, extracted from
+     {{ stats.sources|join(', ') }}.</p>
+{% endif %}
+<form method="get" class="search">
+  <input name="q" value="{{ q }}" placeholder="Search by disease or symptom, e.g. 'fever' or 'asthma'">
+  <button type="submit" class="primary">Search</button>
+</form>
+<div class="letters">
+  <a href="{{ url_for('diseases.library') }}" class="{{ 'active' if not letter and not q }}">All</a>
+  {% for l in letters %}<a href="{{ url_for('diseases.library', letter=l) }}" class="{{ 'active' if l == letter }}">{{ l }}</a>{% endfor %}
+</div>
+{% if q %}<p class="muted">{{ diseases|length }} result(s) for “{{ q }}”.</p>{% endif %}
+<div class="grid">
+  {% for d in diseases %}
+    <a class="tile" href="{{ url_for('diseases.detail', slug=d.slug) }}">
+      <h3>{{ d.name }}</h3>
+      <p>{{ (d.definition or d.description)[:160] }}{% if (d.definition or d.description)|length > 160 %}…{% endif %}</p>
+    </a>
+  {% else %}
+    <p>No diseases found.</p>
+  {% endfor %}
+</div>
+{% endblock %}

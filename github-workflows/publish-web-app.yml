@@ -1,0 +1,35 @@
+# Publishes the Medibot web app (for PC, iPhone and any phone browser) to GitHub Pages.
+# One-time setup: repo Settings > Pages > Source: "GitHub Actions".
+# The app is then at https://<your-username>.github.io/<repo-name>/ and can be installed
+# ("Install app" in Chrome/Edge, "Add to Home Screen" on iPhone). It works offline after the first visit.
+name: Publish web app
+
+on:
+  push:
+    branches: [main, master]
+    paths: ["mobile/www/**", ".github/workflows/publish-web-app.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: mobile/www
+      - id: deployment
+        uses: actions/deploy-pages@v4

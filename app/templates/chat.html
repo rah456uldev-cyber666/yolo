@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+<div class="chat-head">
+  <h1>Ask a medical question</h1>
+  <form method="post" action="{{ url_for('chat.clear') }}" class="inline" onsubmit="return confirm('Clear your chat history?');">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="secondary">Clear chat</button>
+  </form>
+</div>
+
+<div id="chat-box" class="chat-box">
+  {% if not messages %}
+    <div class="empty" id="empty-state">
+      <p>Answers come from <em>The Gale Encyclopedia of Medicine</em>, with the pages they were taken from.</p>
+      <div class="suggestions">
+        {% for s in suggestions %}<button type="button" class="chip" data-q="{{ s }}">{{ s }}</button>{% endfor %}
+      </div>
+    </div>
+  {% endif %}
+  {% for msg in messages %}
+    {% include "_message.html" %}
+  {% endfor %}
+</div>
+
+<form method="post" action="{{ url_for('chat.index') }}" id="chat-form" class="chat-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <textarea name="prompt" id="prompt" placeholder="e.g. What are the symptoms of chickenpox?" required maxlength="1000"></textarea>
+  <button type="submit" class="primary" id="send">Send</button>
+</form>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='chat.js') }}"></script>{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Log in{% endblock %}
+{% block main_class %}narrow{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Log in</h1>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Mobile number
+      <input name="phone" value="{{ phone }}" required inputmode="tel" autocomplete="tel">
+    </label>
+    <label>Password
+      <input type="password" name="password" required autocomplete="current-password">
+    </label>
+    <label class="check"><input type="checkbox" name="remember" value="1"> Keep me logged in</label>
+    <button type="submit" class="primary">Log in</button>
+  </form>
+  <p class="muted"><a href="{{ url_for('auth.forgot_password') }}">Forgot password?</a> ·
+     New here? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+</div>
+{% endblock %}

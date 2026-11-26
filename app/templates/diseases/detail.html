@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ d.name }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('diseases.library') }}">← Disease library</a></p>
+<h1>{{ d.name }}</h1>
+<p class="muted">Source: {{ d.source_pdf }}, PDF page {{ d.source_page }}</p>
+<div class="notice">This information is educational and may be dated (2nd edition encyclopedia). Talk to a doctor before
+  starting, stopping or changing any treatment.</div>
+
+{% macro section(title, text) %}
+  {% if text %}<section class="dsection"><h2>{{ title }}</h2><p>{{ text | nl2br }}</p></section>{% endif %}
+{% endmacro %}
+
+{{ section("What it is", d.definition) }}
+{% if d.symptoms %}
+  <section class="dsection"><h2>Common symptoms</h2>
+    <ul class="symptoms">{% for s in d.symptoms %}<li>{{ s }}</li>{% endfor %}</ul>
+  </section>
+{% endif %}
+{{ section("Causes and symptoms", d.causes_and_symptoms) }}
+{{ section("Treatment", d.treatment) }}
+{{ section("Remedies and alternative treatment", d.alternative_treatment) }}
+{{ section("Prevention", d.prevention) }}
+{{ section("Diagnosis", d.diagnosis) }}
+{{ section("Prognosis", d.prognosis) }}
+{{ section("Description", d.description) }}
+
+<p><a class="button primary" href="{{ url_for('chat.index') }}">Ask Medibot about {{ d.name }}</a></p>
+{% endblock %}

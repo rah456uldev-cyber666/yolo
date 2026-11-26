@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Symptom checker{% endblock %}
+{% block content %}
+<h1>Symptom checker</h1>
+<div class="notice">This is a simple keyword search of the encyclopedia, for learning only. It cannot diagnose you.
+  If you feel unwell, see a doctor. If symptoms are severe, call emergency services.</div>
+<form method="post" class="search">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input name="symptoms" value="{{ text }}" placeholder="Separate symptoms with commas, e.g. fever, headache, rash" required>
+  <button type="submit" class="primary">Check</button>
+</form>
+{% if text %}
+  <p class="muted">Looking for: {{ terms|join(', ') }}</p>
+  {% for r in results %}
+    <a class="tile wide" href="{{ url_for('diseases.detail', slug=r.disease.slug) }}">
+      <h3>{{ r.disease.name }} <span class="badge">{{ r.matched|length }}/{{ terms|length }} matched</span></h3>
+      <p>Matches: {{ r.matched|join(', ') }}</p>
+      <p class="muted">{{ (r.disease.definition or '')[:180] }}…</p>
+    </a>
+  {% else %}
+    <p>No matching conditions found. Try simpler words, such as “fever” or “cough”.</p>
+  {% endfor %}
+{% endif %}
+{% endblock %}
